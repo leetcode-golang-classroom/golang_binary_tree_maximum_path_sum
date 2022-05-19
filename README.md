@@ -61,10 +61,52 @@ Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 
 
 參考下圖
 
-![histogram-maxPathSum.drawio.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cd69ccf2-6042-4fe0-8753-2296603d0ee1/histogram-maxPathSum.drawio.png)
+![](https://i.imgur.com/Hapsjw0.png)
 
 ## 程式碼
 
+```go
+package sol
+
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func maxPathSum(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	result := root.Val
+	MaxSum(root, &result)
+	return result
+}
+
+func MaxSum(root *TreeNode, result *int) int {
+	if root == nil {
+		return 0
+	}
+	leftMax := MaxSum(root.Left, result)
+	rightMax := MaxSum(root.Right, result)
+	// choose or not choose
+	leftMax = Max(leftMax, 0)
+	rightMax = Max(rightMax, 0)
+	// split
+	*result = Max(*result, root.Val+leftMax+rightMax)
+	return root.Val + Max(leftMax, rightMax)
+}
+
+func Max(i, j int) int {
+	if i > j {
+		return i
+	}
+	return j
+}
+
+```
 ## 困難點
 
 1. Understand DFS
